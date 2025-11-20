@@ -22,6 +22,7 @@ type SanitizeTestCase = EachTestingContext<{
   input: {
     obj: TestObject;
     keys: (keyof TestObject)[];
+    maxDepth?: number;
   };
   expected: object;
 }>;
@@ -173,17 +174,28 @@ describe('extractAndSanitizeObjectStringFields', () => {
         },
       },
     },
+    {
+      title: 'should respect maxDepth when sanitizing nested arrays',
+      context: {
+        input: {
+          obj: { tags: [[['  deep  '], ['  nested  ']]] },
+          keys: ['tags'],
+          maxDepth: 1,
+        },
+        expected: { tags: [[['  deep  '], ['  nested  ']]] },
+      },
+    },
   ];
 
   test.each(eachTestingContextFilter(testCases))(
     '$title',
     ({
       context: {
-        input: { obj, keys },
+        input: { obj, keys, maxDepth },
         expected,
       },
     }) => {
-      const result = extractAndSanitizeObjectStringFields(obj, keys);
+      const result = extractAndSanitizeObjectStringFields(obj, keys, maxDepth);
 
       expect(result).toEqual(expected);
     },
