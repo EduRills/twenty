@@ -21,14 +21,14 @@ export class TelemetryListener {
   ) {
     await Promise.all(
       payload.events.map(async (eventPayload) => {
-        this.auditService
+        await this.auditService
           .createContext({
             userId: eventPayload.userId,
             workspaceId: payload.workspaceId,
           })
           .insertWorkspaceEvent(USER_SIGNUP_EVENT, {});
 
-        this.telemetryService.create(
+        await this.telemetryService.create(
           {
             action: USER_SIGNUP_EVENT_NAME,
             payload: {

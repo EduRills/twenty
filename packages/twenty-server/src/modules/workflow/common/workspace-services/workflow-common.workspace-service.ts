@@ -280,32 +280,38 @@ export class WorkflowCommonWorkspaceService {
       withDeleted: true,
     });
 
-    workflowVersions.forEach((workflowVersion) => {
-      workflowVersion.steps?.forEach(async (step) => {
-        if (step.type === WorkflowActionType.CODE) {
-          switch (operation) {
-            case 'delete':
-              await this.serverlessFunctionService.deleteOneServerlessFunction({
-                id: step.settings.input.serverlessFunctionId,
-                workspaceId,
-                softDelete: true,
-              });
-              break;
-            case 'restore':
-              await this.serverlessFunctionService.restoreOneServerlessFunction(
-                step.settings.input.serverlessFunctionId,
-              );
-              break;
-            case 'destroy':
-              await this.serverlessFunctionService.deleteOneServerlessFunction({
-                id: step.settings.input.serverlessFunctionId,
-                workspaceId,
-                softDelete: false,
-              });
-              break;
-          }
-        }
-      });
-    });
+    await Promise.all(
+      workflowVersions.flatMap((workflowVersion) =>
+        (workflowVersion.steps ?? [])
+          .filter((step) => step.type === WorkflowActionType.CODE)
+          .map(async (step) => {
+            switch (operation) {
+              case 'delete':
+                await this.serverlessFunctionService.deleteOneServerlessFunction(
+                  {
+                    id: step.settings.input.serverlessFunctionId,
+                    workspaceId,
+                    softDelete: true,
+                  },
+                );
+                break;
+              case 'restore':
+                await this.serverlessFunctionService.restoreOneServerlessFunction(
+                  step.settings.input.serverlessFunctionId,
+                );
+                break;
+              case 'destroy':
+                await this.serverlessFunctionService.deleteOneServerlessFunction(
+                  {
+                    id: step.settings.input.serverlessFunctionId,
+                    workspaceId,
+                    softDelete: false,
+                  },
+                );
+                break;
+            }
+          }),
+      ),
+    );
   }
 }

@@ -109,8 +109,15 @@ export class CommonFindDuplicatesQueryRunnerService extends CommonBaseQueryRunne
             .take(QUERY_MAX_RECORDS)
             .getMany()) as ObjectRecord[];
 
-          const aggregateQueryBuilder = duplicateRecordsQueryBuilder.clone();
-          const totalCount = await aggregateQueryBuilder.getCount();
+          // Optimization: Only fetch count if we hit the limit
+          // If we got fewer records than the limit, that's the total count
+          let totalCount: number;
+          if (duplicates.length < QUERY_MAX_RECORDS) {
+            totalCount = duplicates.length;
+          } else {
+            const aggregateQueryBuilder = duplicateRecordsQueryBuilder.clone();
+            totalCount = await aggregateQueryBuilder.getCount();
+          }
 
           const { startCursor, endCursor } = getPageInfo(
             duplicates,

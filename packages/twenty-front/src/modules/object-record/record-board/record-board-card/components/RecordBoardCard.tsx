@@ -29,7 +29,7 @@ import { useRecoilComponentState } from '@/ui/utilities/state/component-state/ho
 import { useSetRecoilComponentState } from '@/ui/utilities/state/component-state/hooks/useSetRecoilComponentState';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
 import styled from '@emotion/styled';
-import { useContext } from 'react';
+import { memo, useCallback, useContext } from 'react';
 import { AnimatedEaseInOut } from 'twenty-ui/utilities';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -48,7 +48,7 @@ const StyledBoardCardWrapper = styled.div`
   width: 100%;
 `;
 
-export const RecordBoardCard = () => {
+export const RecordBoardCard = memo(() => {
   const { recordId, rowIndex, columnIndex } = useContext(
     RecordBoardCardContext,
   );
@@ -114,27 +114,35 @@ export const RecordBoardCard = () => {
   const { activateBoardCard } = useActiveRecordBoardCard(recordBoardId);
   const { unfocusBoardCard } = useFocusedRecordBoardCard(recordBoardId);
 
-  const handleContextMenuOpen = (event: React.MouseEvent) => {
-    event.preventDefault();
-    setIsCurrentCardSelected(true);
-    setActionMenuDropdownPosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
-    openDropdown({
-      dropdownComponentInstanceIdFromProps: actionMenuDropdownId,
-      globalHotkeysConfig: {
-        enableGlobalHotkeysWithModifiers: true,
-        enableGlobalHotkeysConflictingWithKeyboard: false,
-      },
-    });
-  };
+  const handleContextMenuOpen = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      setIsCurrentCardSelected(true);
+      setActionMenuDropdownPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      openDropdown({
+        dropdownComponentInstanceIdFromProps: actionMenuDropdownId,
+        globalHotkeysConfig: {
+          enableGlobalHotkeysWithModifiers: true,
+          enableGlobalHotkeysConflictingWithKeyboard: false,
+        },
+      });
+    },
+    [
+      setIsCurrentCardSelected,
+      setActionMenuDropdownPosition,
+      openDropdown,
+      actionMenuDropdownId,
+    ],
+  );
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     activateBoardCard({ rowIndex, columnIndex });
     unfocusBoardCard();
     openRecordFromIndexView({ recordId });
-  };
+  }, [activateBoardCard, rowIndex, columnIndex, unfocusBoardCard, openRecordFromIndexView, recordId]);
 
   const onMouseLeaveBoard = useDebouncedCallback(() => {
     if (isCompactModeActive && isCardExpanded) {
@@ -181,4 +189,4 @@ export const RecordBoardCard = () => {
       </StyledBoardCardWrapper>
     </RecordBoardCardComponentInstanceContext.Provider>
   );
-};
+});

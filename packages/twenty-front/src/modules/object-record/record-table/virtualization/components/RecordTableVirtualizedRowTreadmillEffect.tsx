@@ -126,7 +126,11 @@ export const RecordTableVirtualizedRowTreadmillEffect = () => {
       (scrollEvent: Event) => {
         deactivateLowDetails();
 
-        processTreadmillScrollTop((scrollEvent.target as any).scrollTop);
+        const scrollTop =
+          scrollEvent.target instanceof HTMLElement
+            ? scrollEvent.target.scrollTop
+            : 0;
+        processTreadmillScrollTop(scrollTop);
 
         triggerFetchPages();
 
@@ -148,7 +152,10 @@ export const RecordTableVirtualizedRowTreadmillEffect = () => {
   const handleScrollData = useRecoilCallback(
     ({ snapshot, set }) =>
       (scrollEvent: Event) => {
-        const distanceFromTop = (scrollEvent.target as any).scrollTop;
+        const distanceFromTop =
+          scrollEvent.target instanceof HTMLElement
+            ? scrollEvent.target.scrollTop
+            : 0;
 
         const lastScrollMeasurements = getSnapshotValue(
           snapshot,

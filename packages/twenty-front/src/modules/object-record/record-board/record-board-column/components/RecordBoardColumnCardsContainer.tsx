@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Draggable, type DroppableProvided } from '@hello-pangea/dnd';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { RecordBoardCardDraggableContainer } from '@/object-record/record-board/record-board-card/components/RecordBoardCardDraggableContainer';
@@ -39,7 +39,7 @@ type RecordBoardColumnCardsContainerProps = {
   droppableProvided: DroppableProvided;
 };
 
-export const RecordBoardColumnCardsContainer = ({
+export const RecordBoardColumnCardsContainer = memo(({
   recordBoardColumnId,
   droppableProvided,
 }: RecordBoardColumnCardsContainerProps) => {
@@ -103,4 +103,4 @@ export const RecordBoardColumnCardsContainer = ({
       </StyledNewButtonContainer>
     </StyledColumnCardsContainer>
   );
-};
+});
