@@ -33,6 +33,7 @@ import { AttachmentWorkspaceEntity } from 'src/modules/attachment/standard-objec
 import { CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/company.workspace-entity';
 import { FavoriteWorkspaceEntity } from 'src/modules/favorite/standard-objects/favorite.workspace-entity';
 import { NoteTargetWorkspaceEntity } from 'src/modules/note/standard-objects/note-target.workspace-entity';
+import { OpportunityStakeholderWorkspaceEntity } from 'src/modules/opportunity-stakeholder/standard-objects/opportunity-stakeholder.workspace-entity';
 import { PersonWorkspaceEntity } from 'src/modules/person/standard-objects/person.workspace-entity';
 import { TaskTargetWorkspaceEntity } from 'src/modules/task/standard-objects/task-target.workspace-entity';
 import { TimelineActivityWorkspaceEntity } from 'src/modules/timeline/standard-objects/timeline-activity.workspace-entity';
@@ -197,6 +198,18 @@ export class OpportunityWorkspaceEntity extends BaseWorkspaceEntity {
   })
   @WorkspaceIsFieldUIReadOnly()
   noteTargets: Relation<NoteTargetWorkspaceEntity[]>;
+
+  @WorkspaceRelation({
+    standardId: OPPORTUNITY_STANDARD_FIELD_IDS.stakeholders,
+    type: RelationType.ONE_TO_MANY,
+    label: msg`Stakeholders`,
+    description: msg`Stakeholders aligned to the deal room`,
+    icon: STANDARD_OBJECT_ICONS.opportunityStakeholder,
+    inverseSideTarget: () => OpportunityStakeholderWorkspaceEntity,
+    onDelete: RelationOnDeleteAction.CASCADE,
+  })
+  @WorkspaceIsNullable()
+  stakeholders: Relation<OpportunityStakeholderWorkspaceEntity[]>;
 
   @WorkspaceRelation({
     standardId: OPPORTUNITY_STANDARD_FIELD_IDS.attachments,

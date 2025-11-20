@@ -338,6 +338,7 @@ export const OPPORTUNITY_STANDARD_FIELD_IDS = {
   noteTargets: '20202020-dd3f-42d5-a382-db58aabf43d3',
   attachments: '20202020-87c7-4118-83d6-2f4031005209',
   timelineActivities: '20202020-30e2-421f-96c7-19c69d1cf631',
+  stakeholders: '20202020-7f0d-41fb-8c7f-f53e04376262',
   searchVector: '428a0da5-4b2e-4ce3-b695-89a8b384e6e3',
 } as const;
 
@@ -364,8 +365,20 @@ export const PERSON_STANDARD_FIELD_IDS = {
   attachments: '20202020-cd97-451f-87fa-bcb789bdbf3a',
   messageParticipants: '20202020-498e-4c61-8158-fa04f0638334',
   calendarEventParticipants: '20202020-52ee-45e9-a702-b64b3753e3a9',
+  opportunityStakeholders: '20202020-6719-4ee1-9d8b-fd4c173d279a',
   timelineActivities: '20202020-a43e-4873-9c23-e522de906ce5',
   searchVector: '57d1d7ad-fa10-44fc-82f3-ad0959ec2534',
+} as const;
+
+export const OPPORTUNITY_STAKEHOLDER_STANDARD_FIELD_IDS = {
+  opportunity: '20202020-0037-4c1d-8987-7f565fe23f0c',
+  person: '20202020-50ae-4a8a-91a1-a8cc955ef3f7',
+  role: '20202020-2e3f-4da3-95e8-8bf89396d2b3',
+  influenceLevel: '20202020-c77f-4cf2-9d0f-3e51c85c4641',
+  engagement: '20202020-c0af-4a77-9b8d-d9cfa23d70dc',
+  notes: '20202020-f9b7-4af4-9f4a-427e0f0b3264',
+  position: '20202020-0dc7-4ae0-9ee3-577604e910f5',
+  createdBy: '20202020-fd17-4d83-9752-2bb6f85e7161',
 } as const;
 
 export const TASK_STANDARD_FIELD_IDS = {
@@ -590,6 +603,7 @@ export const STANDARD_OBJECT_FIELD_IDS = {
   note: NOTE_STANDARD_FIELD_IDS,
   noteTarget: NOTE_TARGET_STANDARD_FIELD_IDS,
   opportunity: OPPORTUNITY_STANDARD_FIELD_IDS,
+  opportunityStakeholder: OPPORTUNITY_STAKEHOLDER_STANDARD_FIELD_IDS,
   person: PERSON_STANDARD_FIELD_IDS,
   task: TASK_STANDARD_FIELD_IDS,
   taskTarget: TASK_TARGET_STANDARD_FIELD_IDS,

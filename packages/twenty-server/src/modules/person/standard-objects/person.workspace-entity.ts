@@ -40,6 +40,7 @@ import { CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/com
 import { FavoriteWorkspaceEntity } from 'src/modules/favorite/standard-objects/favorite.workspace-entity';
 import { MessageParticipantWorkspaceEntity } from 'src/modules/messaging/common/standard-objects/message-participant.workspace-entity';
 import { NoteTargetWorkspaceEntity } from 'src/modules/note/standard-objects/note-target.workspace-entity';
+import { OpportunityStakeholderWorkspaceEntity } from 'src/modules/opportunity-stakeholder/standard-objects/opportunity-stakeholder.workspace-entity';
 import { OpportunityWorkspaceEntity } from 'src/modules/opportunity/standard-objects/opportunity.workspace-entity';
 import { TaskTargetWorkspaceEntity } from 'src/modules/task/standard-objects/task-target.workspace-entity';
 import { TimelineActivityWorkspaceEntity } from 'src/modules/timeline/standard-objects/timeline-activity.workspace-entity';
@@ -292,6 +293,19 @@ export class PersonWorkspaceEntity extends BaseWorkspaceEntity {
   calendarEventParticipants: Relation<
     CalendarEventParticipantWorkspaceEntity[]
   >;
+
+  @WorkspaceRelation({
+    standardId: PERSON_STANDARD_FIELD_IDS.opportunityStakeholders,
+    type: RelationType.ONE_TO_MANY,
+    label: msg`Deal stakeholders`,
+    description: msg`Stakeholder roles this person holds across deals`,
+    icon: STANDARD_OBJECT_ICONS.opportunityStakeholder,
+    inverseSideTarget: () => OpportunityStakeholderWorkspaceEntity,
+    onDelete: RelationOnDeleteAction.SET_NULL,
+  })
+  @WorkspaceIsNullable()
+  @WorkspaceIsSystem()
+  opportunityStakeholders: Relation<OpportunityStakeholderWorkspaceEntity[]>;
 
   @WorkspaceRelation({
     standardId: PERSON_STANDARD_FIELD_IDS.timelineActivities,
