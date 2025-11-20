@@ -24,19 +24,18 @@ export const extractAndSanitizeObjectStringFields = <
     }
 
     if (Array.isArray(value)) {
-      return value.map((item) => processValue(item, currentDepth));
+      return value.map((item) => processValue(item, currentDepth + 1));
     }
 
     if (typeof value === 'object') {
       const obj = value as Record<string, unknown>;
-      const objKeys = Object.keys(obj);
-      return objKeys.reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: processValue(obj[key], currentDepth + 1),
-        }),
-        {},
-      );
+      const acc: Record<string, unknown> = {};
+
+      for (const key of Object.keys(obj)) {
+        acc[key] = processValue(obj[key], currentDepth + 1);
+      }
+
+      return acc;
     }
 
     if (typeof value === 'string') {
@@ -53,9 +52,8 @@ export const extractAndSanitizeObjectStringFields = <
       return acc;
     }
 
-    return {
-      ...acc,
-      [key]: value,
-    };
+    acc[key] = value;
+
+    return acc;
   }, {} as T);
 };
